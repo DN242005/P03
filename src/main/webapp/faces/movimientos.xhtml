@@ -1,0 +1,59 @@
+<ui:composition template="/faces/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+<ui:define name="contenido">
+
+    <h2>Registrar entrada o salida (Web 2.0 - JSF/PrimeFaces)</h2>
+
+    <h:form id="formMovimiento">
+        <p:messages id="mensajes" showDetail="true"/>
+
+        <p:panelGrid columns="2" columnClasses="etiqueta,campo">
+            <h:outputLabel for="producto" value="Producto"/>
+            <p:selectOneMenu id="producto" value="#{movimientoBean.idProducto}" required="true"
+                              requiredMessage="Selecciona un producto.">
+                <f:selectItem itemLabel="Selecciona un producto" itemValue="#{null}" noSelectionOption="true"/>
+                <f:selectItems value="#{movimientoBean.productos}" var="p" itemLabel="#{p.codigo} - #{p.nombre} (existencia: #{p.existencia})" itemValue="#{p.idProducto}"/>
+            </p:selectOneMenu>
+
+            <h:outputLabel for="usuario" value="Usuario que registra"/>
+            <p:selectOneMenu id="usuario" value="#{movimientoBean.idUsuario}" required="true"
+                              requiredMessage="Selecciona un usuario.">
+                <f:selectItem itemLabel="Selecciona un usuario" itemValue="#{null}" noSelectionOption="true"/>
+                <f:selectItems value="#{movimientoBean.usuarios}" var="u" itemLabel="#{u.nombre} (#{u.rol})" itemValue="#{u.idUsuario}"/>
+            </p:selectOneMenu>
+
+            <h:outputLabel for="tipo" value="Tipo de movimiento"/>
+            <p:selectOneRadio id="tipo" value="#{movimientoBean.tipo}">
+                <f:selectItem itemLabel="Entrada" itemValue="ENTRADA"/>
+                <f:selectItem itemLabel="Salida" itemValue="SALIDA"/>
+            </p:selectOneRadio>
+
+            <h:outputLabel for="cantidad" value="Cantidad"/>
+            <p:inputNumber id="cantidad" value="#{movimientoBean.cantidad}" minValue="0.01" decimalPlaces="2"/>
+
+            <h:outputLabel for="comentario" value="Comentario (opcional)"/>
+            <p:inputText id="comentario" value="#{movimientoBean.comentario}"/>
+        </p:panelGrid>
+
+        <p:commandButton value="Registrar movimiento" action="#{movimientoBean.registrar}"
+                          update="formMovimiento"/>
+    </h:form>
+
+    <h3>Ultimos movimientos</h3>
+    <h:form id="formRecientes">
+        <p:dataTable var="m" value="#{movimientoBean.recientes}" emptyMessage="Aun no hay movimientos registrados.">
+            <p:column headerText="Fecha"><h:outputText value="#{m.fechaHora}"/></p:column>
+            <p:column headerText="Producto"><h:outputText value="#{m.nombreProducto}"/></p:column>
+            <p:column headerText="Usuario"><h:outputText value="#{m.nombreUsuario}"/></p:column>
+            <p:column headerText="Tipo"><h:outputText value="#{m.tipo}"/></p:column>
+            <p:column headerText="Cantidad"><h:outputText value="#{m.cantidad}"/></p:column>
+            <p:column headerText="Comentario"><h:outputText value="#{m.comentario}"/></p:column>
+        </p:dataTable>
+    </h:form>
+
+</ui:define>
+</ui:composition>

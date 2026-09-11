@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>PR01 - Inventario (Web 2.0)</title>
+        <h:outputStylesheet library="css" name="estilo.css"/>
+    </h:head>
+    <h:body>
+        <header>
+            <h1>PR01. Control de inventario inteligente</h1>
+            <nav aria-label="Navegacion principal">
+                <h:outputLink value="#{facesContext.externalContext.requestContextPath}/catalogo">Catalogo Web 1.0</h:outputLink> |
+                <h:outputLink value="#{facesContext.externalContext.requestContextPath}/movimiento">Movimientos Web 1.0</h:outputLink> |
+                <h:link outcome="productos" value="Productos (Web 2.0)"/> |
+                <h:link outcome="movimientos" value="Movimientos (Web 2.0)"/>
+            </nav>
+        </header>
+        <main>
+            <ui:insert name="contenido"/>
+        </main>
+    </h:body>
+</ui:composition>
