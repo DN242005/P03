@@ -19,12 +19,8 @@
                 <f:selectItems value="#{movimientoBean.productos}" var="p" itemLabel="#{p.codigo} - #{p.nombre} (existencia: #{p.existencia})" itemValue="#{p.idProducto}"/>
             </p:selectOneMenu>
 
-            <h:outputLabel for="usuario" value="Usuario que registra"/>
-            <p:selectOneMenu id="usuario" value="#{movimientoBean.idUsuario}" required="true"
-                              requiredMessage="Selecciona un usuario.">
-                <f:selectItem itemLabel="Selecciona un usuario" itemValue="#{null}" noSelectionOption="true"/>
-                <f:selectItems value="#{movimientoBean.usuarios}" var="u" itemLabel="#{u.nombre} (#{u.rol})" itemValue="#{u.idUsuario}"/>
-            </p:selectOneMenu>
+            <h:outputLabel for="usuarioActual" value="Usuario que registra"/>
+            <h:outputText id="usuarioActual" value="#{sesionBean.usuarioActual.nombre} (#{sesionBean.usuarioActual.rol})"/>
 
             <h:outputLabel for="tipo" value="Tipo de movimiento"/>
             <p:selectOneRadio id="tipo" value="#{movimientoBean.tipo}">
@@ -33,14 +29,15 @@
             </p:selectOneRadio>
 
             <h:outputLabel for="cantidad" value="Cantidad"/>
-            <p:inputNumber id="cantidad" value="#{movimientoBean.cantidad}" minValue="0.01" decimalPlaces="2"/>
+            <p:inputNumber id="cantidad" value="#{movimientoBean.cantidad}" minValue="0.01" decimalPlaces="2"
+                           required="true" requiredMessage="La cantidad es obligatoria."/>
 
             <h:outputLabel for="comentario" value="Comentario (opcional)"/>
             <p:inputText id="comentario" value="#{movimientoBean.comentario}"/>
         </p:panelGrid>
 
         <p:commandButton value="Registrar movimiento" action="#{movimientoBean.registrar}"
-                          update="formMovimiento"/>
+                  update="formMovimiento" disabled="#{!sesionBean.puedeRegistrarMovimientos}"/>
     </h:form>
 
     <h3>Ultimos movimientos</h3>

@@ -54,11 +54,15 @@
         <p:panelGrid columns="2" columnClasses="etiqueta,campo">
             <h:outputLabel for="codigo" value="Codigo"/>
             <p:inputText id="codigo" value="#{productoBean.nuevo.codigo}" required="true"
-                         requiredMessage="El codigo es obligatorio."/>
+                         requiredMessage="El codigo es obligatorio." maxlength="30">
+                <f:validateLength minimum="2" maximum="30"/>
+            </p:inputText>
 
             <h:outputLabel for="nombre" value="Nombre"/>
             <p:inputText id="nombre" value="#{productoBean.nuevo.nombre}" required="true"
-                         requiredMessage="El nombre es obligatorio."/>
+                         requiredMessage="El nombre es obligatorio." maxlength="120">
+                <f:validateLength minimum="2" maximum="120"/>
+            </p:inputText>
 
             <h:outputLabel for="categoria" value="Categoria"/>
             <p:selectOneMenu id="categoria" value="#{productoBean.nuevo.idCategoria}" required="true">
@@ -67,10 +71,12 @@
             </p:selectOneMenu>
 
             <h:outputLabel for="unidad" value="Unidad de medida"/>
-            <p:inputText id="unidad" value="#{productoBean.nuevo.unidadMedida}" required="true"/>
+            <p:inputText id="unidad" value="#{productoBean.nuevo.unidadMedida}" required="true"
+                         requiredMessage="La unidad de medida es obligatoria." maxlength="20"/>
 
             <h:outputLabel for="minimo" value="Minimo permitido"/>
-            <p:inputNumber id="minimo" value="#{productoBean.nuevo.minimoPermitido}" minValue="0" decimalPlaces="2"/>
+            <p:inputNumber id="minimo" value="#{productoBean.nuevo.minimoPermitido}" minValue="0" decimalPlaces="2"
+                           required="true" requiredMessage="El minimo permitido es obligatorio."/>
         </p:panelGrid>
 
         <p:commandButton value="Guardar producto" action="#{productoBean.guardarNuevo}"

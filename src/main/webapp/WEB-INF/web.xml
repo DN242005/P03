@@ -30,6 +30,15 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
+    <filter>
+        <filter-name>SesionFilter</filter-name>
+        <filter-class>com.uv.inventario.web1.SesionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SesionFilter</filter-name>
+        <url-pattern>/faces/*</url-pattern>
+    </filter-mapping>
+
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>

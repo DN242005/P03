@@ -58,6 +58,11 @@ También se puede usar Docker para PostgreSQL, sin instalar el servidor en el eq
    ```
    Si el contenedor ya existe, usa `docker start postgres` en lugar de `docker run`.
 
+   Para repetir el recorrido de P03 con un producto sintetico adicional:
+   ```bash
+   psql -U postgres -d pr01_inventario -f sql/test-data.sql
+   ```
+
 2. Definir las credenciales (no quedan escritas en el codigo):
    ```bash
    export DB_URL=jdbc:postgresql://localhost:5432/pr01_inventario
@@ -78,12 +83,32 @@ También se puede usar Docker para PostgreSQL, sin instalar el servidor en el eq
    - Web 1.0: `http://localhost:8080/pr01-inventario/catalogo` y `http://localhost:8080/pr01-inventario/movimiento`
    - Web 2.0: `http://localhost:8080/pr01-inventario/faces/productos.xhtml` y `.../faces/movimientos.xhtml`
 
+   La primera entrada Web 2.0 redirige a `/faces/login.xhtml`. La sesion usa los usuarios sinteticos del esquema; solo los roles `ALMACEN` y `CAPTURA` pueden registrar movimientos. El boton de cierre de sesion invalida la sesion HTTP.
+
+## Verificacion y limpieza
+
+Desde la raiz del proyecto, con Bash o Git Bash:
+```bash
+./scripts/verify-module.sh M03
+./scripts/cleanup.sh
+```
+
+En Windows PowerShell, usa los equivalentes:
+```powershell
+.\scripts\verify-module.ps1
+.\scripts\cleanup.ps1
+```
+
+La verificacion compila el WAR y comprueba la configuracion JSF/PrimeFaces, PostgreSQL y la regla transaccional que rechaza salidas mayores a la existencia. La limpieza solo elimina `target/`; no borra historial ni la base de datos.
+
 ## Pruebas minimas (sugeridas para la evidencia P02)
 - Positiva: registrar una entrada y verificar que la existencia aumenta.
 - Positiva: registrar una salida valida y verificar que la existencia disminuye y aparece en "Ultimos movimientos".
 - Negativa: intentar una salida mayor a la existencia → debe rechazarse con mensaje ("No se puede registrar una salida mayor a la existencia disponible").
 - Negativa: capturar una cantidad de movimiento en cero o negativa → debe rechazarse.
 - Recorrido principal: dar de alta un producto con minimo permitido, bajar su existencia por debajo del minimo con una salida, y confirmar que aparece marcado como "ALERTA" en ambos catalogos (Web 1.0 y Web 2.0).
+
+La matriz de criterios, estados y recorrido visual se encuentra en `docs/P03_EQUIPO_01_EVIDENCIA.md`. Las capturas que dependan de PostgreSQL y Tomcat deben agregarse despues de ejecutarlas; el repositorio no incluye capturas aisladas como sustituto de la ejecucion.
 
 ## Exclusiones de esta ficha
 Facturacion, compras automaticas, contabilidad y hardware obligatorio.

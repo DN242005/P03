@@ -14,6 +14,10 @@
                 <h:link outcome="productos" value="Productos (Web 2.0)"/> |
                 <h:link outcome="movimientos" value="Movimientos (Web 2.0)"/>
             </nav>
+            <h:form id="formSesion">
+                <h:outputText value="Sesion: #{sesionBean.usuarioActual.nombre} (#{sesionBean.usuarioActual.rol})"/>
+                <h:commandLink action="#{sesionBean.cerrarSesion}" value="Cerrar sesion"/>
+            </h:form>
         </header>
         <main>
             <ui:insert name="contenido"/>

@@ -27,11 +27,9 @@ public class MovimientoBean implements Serializable {
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     private List<Producto> productos;
-    private List<Usuario> usuarios;
     private List<Movimiento> recientes;
 
     private Integer idProducto;
-    private Integer idUsuario;
     private String tipo = "ENTRADA";
     private BigDecimal cantidad;
     private String comentario;
@@ -44,7 +42,6 @@ public class MovimientoBean implements Serializable {
     private void cargarListas() {
         try {
             productos = productoDAO.listar();
-            usuarios = usuarioDAO.listar();
             recientes = movimientoDAO.listarRecientes(10);
         } catch (SQLException e) {
             agregarMensaje(FacesMessage.SEVERITY_ERROR, "No fue posible cargar la informacion del formulario.");
@@ -53,7 +50,12 @@ public class MovimientoBean implements Serializable {
 
     public void registrar() {
         try {
-            movimientoDAO.registrar(idProducto, idUsuario, tipo, cantidad, comentario);
+            Usuario usuarioActual = usuarioActual();
+            if (!usuarioDAO.puedeRegistrarMovimientos(usuarioActual)) {
+                agregarMensaje(FacesMessage.SEVERITY_ERROR, "La sesion actual no puede registrar movimientos.");
+                return;
+            }
+            movimientoDAO.registrar(idProducto, usuarioActual.getIdUsuario(), tipo, cantidad, comentario);
             agregarMensaje(FacesMessage.SEVERITY_INFO, "Movimiento registrado correctamente.");
             cantidad = null;
             comentario = null;
@@ -65,17 +67,20 @@ public class MovimientoBean implements Serializable {
         }
     }
 
+    private Usuario usuarioActual() {
+        SesionBean sesion = (SesionBean) FacesContext.getCurrentInstance().getExternalContext()
+            .getSessionMap().get("sesionBean");
+        return sesion == null ? null : sesion.getUsuarioActual();
+    }
+
     private void agregarMensaje(FacesMessage.Severity severidad, String texto) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severidad, texto, null));
     }
 
     public List<Producto> getProductos() { return productos; }
-    public List<Usuario> getUsuarios() { return usuarios; }
     public List<Movimiento> getRecientes() { return recientes; }
     public Integer getIdProducto() { return idProducto; }
     public void setIdProducto(Integer idProducto) { this.idProducto = idProducto; }
-    public Integer getIdUsuario() { return idUsuario; }
-    public void setIdUsuario(Integer idUsuario) { this.idUsuario = idUsuario; }
     public String getTipo() { return tipo; }
     public void setTipo(String tipo) { this.tipo = tipo; }
     public BigDecimal getCantidad() { return cantidad; }
